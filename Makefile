@@ -6,3 +6,6 @@ device.o: device.c
 
 mkgpt.o: mkgpt.c
 	gcc -c mkgpt.c
+
+clean:
+	@rm -rf mkgpt *.o
