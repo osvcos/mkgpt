@@ -1,6 +1,7 @@
 #include <fcntl.h>
 #include <linux/fs.h>
 #include <stddef.h>
+#include <stdio.h>
 #include <sys/ioctl.h>
 #include <unistd.h>
 
@@ -23,7 +24,10 @@ int open_device(char *devname, struct device *dev)
     if(ioctl(fd, BLKGETSIZE64, &size) == -1)
         return -1;
 
-    *dev = (struct device){.descriptor = fd, .lsz = lsz, .psz = psz, .size = size};
+    dev->descriptor = fd;
+    dev->lsz = lsz;
+    dev->psz = psz;
+    dev->size = size;
     return 0;
 }
 

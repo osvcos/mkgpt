@@ -1,6 +1,8 @@
 #include <stdio.h>
 #include <string.h>
 
+#include "device.h"
+
 void usage()
 {
     printf("mkgpt [--force] [device]\n");
@@ -10,6 +12,7 @@ int main(int argc, char *argv[])
 {
     int force = 0;
     char *devname = NULL;
+    struct device dev;
 
     if (argc > 3)
     {
@@ -52,5 +55,11 @@ int main(int argc, char *argv[])
             }
         }
     }
+    if(open_device(devname, &dev) < 0)
+    {
+        printf("Unable to open device.\n");
+        return -1;
+    }
+    close_device(&dev);
     return 0;
 }
