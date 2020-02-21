@@ -69,6 +69,7 @@ int main(int argc, char *argv[])
         if(mbr_exists(&dev))
         {
             printf("A MBR structure was found in the disk. If you really want to proceed and DESTROY YOUR PARTITIONS, use the --force parameter.\n");
+            close_device(&dev);
             return -1;
         }
     }
