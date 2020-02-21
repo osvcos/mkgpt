@@ -2,6 +2,7 @@
 #include <string.h>
 
 #include "device.h"
+#include "mbr.h"
 
 void usage()
 {
@@ -59,6 +60,17 @@ int main(int argc, char *argv[])
     {
         printf("Unable to open device.\n");
         return -1;
+    }
+    printf("Device: %s\n", devname);
+    printf("Sector size (logical/physical): %d/%d\n", dev.lsz, dev.psz);
+    printf("Size (in bytes): %llu\n", dev.size);
+    if(!force)
+    {
+        if(mbr_exists(&dev))
+        {
+            printf("A MBR structure was found in the disk. If you really want to proceed and DESTROY YOUR PARTITIONS, use the --force parameter.\n");
+            return -1;
+        }
     }
     close_device(&dev);
     return 0;

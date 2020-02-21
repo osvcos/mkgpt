@@ -14,5 +14,6 @@ struct device {
 
 int open_device(char *devname, struct device *dev);
 void close_device(struct device *dev);
+int seek_lba(unsigned long long lba_address, struct device *dev);
 
 #endif // DEVICE_H

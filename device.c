@@ -35,5 +35,13 @@ void close_device(struct device *dev)
 {
     if(dev->descriptor > 0)
         close(dev->descriptor);
-    dev = NULL;
+    dev->lsz = 0;
+    dev->psz = 0;
+    dev->size = 0;
+}
+
+int seek_lba(unsigned long long lba_address, struct device *dev)
+{
+    unsigned long long offset = dev->lsz * lba_address;
+    return lseek(dev->descriptor, offset, SEEK_SET);
 }
