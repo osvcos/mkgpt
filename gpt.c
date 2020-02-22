@@ -1,5 +1,6 @@
 #include <string.h>
 #include <unistd.h>
+#include <zlib.h>
 
 #include "device.h"
 #include "mbr.h"
@@ -23,9 +24,11 @@ int initialize_gpt(struct device *dev)
     gpt.revision[3] = 0x00;
 
     gpt.header_size = sizeof(gpt_header);
+    gpt.header_crc32 = crc32(0L, (const Bytef*) &gpt, sizeof(gpt_header));
 
     gpt.my_lba = 1;
     gpt.alternate_lba = (dev->size / dev->lsz);
+    gpt.first_usable_lba = ((16385 / dev->lsz) + 2);
     if((write(dev->descriptor, &gpt, sizeof(gpt_header)) == -1))
         return -1;
     return 0;

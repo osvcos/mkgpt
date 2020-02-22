@@ -1,5 +1,7 @@
+LDFLAGS := $(shell pkg-config --libs zlib)
+
 all: device.o mkgpt.o mbr.o gpt.o
-	gcc device.o mkgpt.o mbr.o gpt.o -o mkgpt
+	gcc $(LDFLAGS) device.o mkgpt.o mbr.o gpt.o -o mkgpt
 
 device.o: device.c
 	gcc -c device.c
