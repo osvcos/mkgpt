@@ -2,6 +2,7 @@
 #include <string.h>
 
 #include "device.h"
+#include "gpt.h"
 #include "mbr.h"
 
 void usage()
@@ -72,6 +73,11 @@ int main(int argc, char *argv[])
             close_device(&dev);
             return -1;
         }
+    }
+    if(initialize_gpt(&dev) == -1)
+    {
+       close_device(&dev);
+       return -1;
     }
     close_device(&dev);
     return 0;
