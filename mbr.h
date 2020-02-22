@@ -16,13 +16,13 @@ typedef struct {
     
 } __attribute__((packed)) partition_record;
 
-struct master_boot_record {
-    char boot_code[440];
-    unsigned int disk_signature;
+typedef struct {
+    unsigned char boot_code[440];
+    unsigned int disk_id;
     unsigned short unknown;
     partition_record partitions[4];
-    unsigned short signature;
-} __attribute__((packed));
+    unsigned char signature[2];
+} __attribute__((packed)) master_boot_record;
 
 int mbr_exists(struct device *dev);
 int create_mbr(struct device *dev, int type);
