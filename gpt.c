@@ -28,12 +28,20 @@ int initialize_gpt(struct device *dev)
     gpt.my_lba = 1;
     gpt.alternate_lba = (dev->size / dev->lsz);
     gpt.first_usable_lba = ((16385 / dev->lsz) + 2);
+    gpt.last_usable_lba = gpt.alternate_lba - 1;
 
     gpt.header_crc32 = crc32(0L, Z_NULL, 0);
     for(int i = 0; i < sizeof(gpt_header); i++)
         gpt.header_crc32 = crc32(gpt.header_crc32, (unsigned char*) &gpt + i, 1);
 
+    // Write primary GPT Header
     if((write(dev->descriptor, &gpt, sizeof(gpt_header)) == -1))
+        return -1;
+
+    // Write backup GPT Header
+    if(seek_lba(gpt.alternate_lba, dev) == -1)
+        return -1;
+    if(write(dev->descriptor, &gpt, sizeof(gpt_header)) == -1)
         return -1;
     return 0;
 }
