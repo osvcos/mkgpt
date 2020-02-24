@@ -58,7 +58,7 @@ int create_mbr(struct device *dev, int type)
 
         partitions[0].starting_lba = 1;
 
-        total_sectors = (dev->size / dev->lsz);
+        total_sectors = (dev->size / dev->lsz) - 1;
         if(total_sectors > 0xFFFFFFFF)
             partitions[0].size_in_lba = 0xFFFFFFFF;
         else
