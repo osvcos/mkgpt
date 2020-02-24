@@ -4,6 +4,15 @@
 #include "device.h"
 
 typedef struct {
+    unsigned short partition_type_guid[8];
+    unsigned short partition_guid[8];
+    unsigned long long starting_lba;
+    unsigned long long ending_lba;
+    unsigned long long attributes;
+    unsigned char partition_name[72];
+} __attribute__((packed)) gpt_partition_entry;
+
+typedef struct {
     unsigned char signature[8];
     unsigned char revision[4];
     unsigned int header_size;
