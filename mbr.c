@@ -16,7 +16,7 @@ int mbr_exists(struct device *dev)
     {
         return -1;
     }
-    if(mbr.signature[0] == 0x55 & mbr.signature[1] == 0xAA)
+    if(mbr.signature[0] == 0x55 && mbr.signature[1] == 0xAA)
     {
         return 1;
     }
