@@ -30,6 +30,7 @@ int create_mbr(struct device *dev, int type)
 {
     master_boot_record mbr;
     partition_record partitions[4];
+    unsigned long long total_sectors;
 
     if(seek_lba(0, dev) == -1)
         return -1;
@@ -57,7 +58,11 @@ int create_mbr(struct device *dev, int type)
 
         partitions[0].starting_lba = 1;
 
-        partitions[0].size_in_lba = ((dev->size / dev->lsz) - 1);
+        total_sectors = (dev->size / dev->lsz);
+        if(total_sectors > 0xFFFFFFFF)
+            partitions[0].size_in_lba = 0xFFFFFFFF;
+        else
+            partitions[0].size_in_lba = (unsigned int) total_sectors - 1;
     }
     memcpy(mbr.partitions, partitions, sizeof(partitions));
 
