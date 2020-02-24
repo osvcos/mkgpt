@@ -1,4 +1,6 @@
+#include <errno.h>
 #include <stdio.h>
+#include <string.h>
 #include <string.h>
 
 #include "device.h"
@@ -76,6 +78,7 @@ int main(int argc, char *argv[])
     }
     if(initialize_gpt(&dev) == -1)
     {
+       printf("Error initializing GPT: %s\n", strerror(errno));
        close_device(&dev);
        return -1;
     }
