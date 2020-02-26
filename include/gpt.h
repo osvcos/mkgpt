@@ -14,7 +14,7 @@ typedef struct {
 
 typedef struct {
     unsigned char signature[8];
-    unsigned char revision[4];
+    unsigned int revision;
     unsigned int header_size;
     unsigned int header_crc32;
     unsigned int reserved;
