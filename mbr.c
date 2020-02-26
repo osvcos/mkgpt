@@ -62,7 +62,7 @@ int create_mbr(struct device *dev, int type)
         if(total_sectors > 0xFFFFFFFF)
             partitions[0].size_in_lba = 0xFFFFFFFF;
         else
-            partitions[0].size_in_lba = (unsigned int) total_sectors - 1;
+            partitions[0].size_in_lba = (unsigned int) total_sectors;
     }
     memcpy(mbr.partitions, partitions, sizeof(partitions));
 
