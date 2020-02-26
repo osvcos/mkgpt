@@ -78,6 +78,14 @@ int initialize_gpt(struct device *dev)
         return -1;
     if(write(dev->descriptor, &primary_gpt, sizeof(gpt_header)) == -1)
         return -1;
+    if(seek_lba(2, dev) == -1)
+        return -1;
+    if(write(dev->descriptor, parts, sizeof(parts)) == -1)
+        return -1;
+    if(seek_lba((last_usable_lba + 1), dev) == -1)
+        return -1;
+    if(write(dev->descriptor, parts, sizeof(parts)) == -1)
+        return -1;
     if(seek_lba(last_lba, dev) == -1)
         return -1;
     if(write(dev->descriptor, &backup_gpt, sizeof(gpt_header)) == -1)
