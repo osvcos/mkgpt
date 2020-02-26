@@ -6,6 +6,7 @@
 #include <unistd.h>
 
 #include "device.h"
+#include "mbr.h"
 
 int open_device(char *devname, struct device *dev)
 {
@@ -38,6 +39,28 @@ void close_device(struct device *dev)
     dev->lsz = 0;
     dev->psz = 0;
     dev->size = 0;
+}
+
+int has_partition_scheme(struct device *dev)
+{
+    master_boot_record mbr;
+    int retval = PARTSCHEME_IS_NOTHING;
+
+    if(seek_lba(0, dev) == -1)
+    {
+        return -1;
+    }
+    if(read(dev->descriptor, &mbr, sizeof(master_boot_record)) == -1)
+    {
+        return -1;
+    }
+    if(mbr.signature[0] == 0x55 && mbr.signature[1] == 0xAA)
+    {
+        retval = PARTSCHEME_IS_MBR;
+        if(mbr.partitions[0].os_type == 0xEE)
+            retval = PARTSCHEME_IS_GPT;
+    }
+    return retval;
 }
 
 int seek_lba(unsigned long long lba_address, struct device *dev)

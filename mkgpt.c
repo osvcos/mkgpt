@@ -69,9 +69,9 @@ int main(int argc, char *argv[])
     printf("Size (in bytes): %llu\n", dev.size);
     if(!force)
     {
-        if(mbr_exists(&dev))
+        if(has_partition_scheme(&dev) != PARTSCHEME_IS_NOTHING)
         {
-            printf("A MBR structure was found in the disk. If you really want to proceed and DESTROY YOUR PARTITIONS, use the --force parameter.\n");
+            printf("An existing partition scheme was found on this device. If you really want to proceed and DESTROY YOUR PARTITIONS, use the --force parameter.\n");
             close_device(&dev);
             return -1;
         }
