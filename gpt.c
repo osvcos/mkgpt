@@ -6,42 +6,81 @@
 #include "mbr.h"
 #include "gpt.h"
 
+static unsigned long get_crc32(const Bytef* data, unsigned int len)
+{
+    unsigned long crc = crc32(0L, Z_NULL, 0);
+    for(int i = 0; i < len; i++)
+        crc = crc32(crc, data + i, 1);
+    return crc;
+}
+
 int initialize_gpt(struct device *dev)
 {
-    gpt_header gpt;
+    gpt_header primary_gpt;
+    gpt_header backup_gpt;
+    gpt_partition_entry parts[128];
+    unsigned int header_crc32;
+    unsigned long long first_usable_lba;
+    unsigned long long last_usable_lba;
+    unsigned long long last_lba;
 
-    memset(&gpt, 0, sizeof(gpt_header));
     if(create_mbr(dev, MBR_TYPE_PROTECTIVE) == -1)
         return -1;
+
+    memset(&primary_gpt, 0, sizeof(gpt_header));
+    memset(&backup_gpt, 0, sizeof(gpt_header));
+    memset(parts, 0, sizeof(parts));
+
+    memcpy(primary_gpt.signature, "EFI PART", sizeof(primary_gpt.signature));
+    memcpy(backup_gpt.signature, "EFI PART", sizeof(primary_gpt.signature));
+
+    primary_gpt.revision = 0x00010000;
+    backup_gpt.revision = 0x00010000;
+
+    primary_gpt.header_size = sizeof(gpt_header);
+    backup_gpt.header_size = sizeof(gpt_header);
+
+    last_lba = (dev->size / dev->lsz) - 1;
+
+    primary_gpt.my_lba = 1;
+    backup_gpt.my_lba = last_lba;
+
+    primary_gpt.alternate_lba = last_lba;
+    backup_gpt.alternate_lba = 1;
+
+    first_usable_lba = ((sizeof(gpt_partition_entry) / (dev->lsz / sizeof(gpt_partition_entry))) + 2);
+    last_usable_lba = (last_lba - 1 - (first_usable_lba - 2));
+
+    primary_gpt.first_usable_lba = first_usable_lba;
+    backup_gpt.first_usable_lba = first_usable_lba;
+
+    primary_gpt.last_usable_lba = last_usable_lba;
+    backup_gpt.last_usable_lba = last_usable_lba;
+
+     // TODO: Disk GUID
+
+    primary_gpt.partition_entry_lba = 2;
+    backup_gpt.partition_entry_lba = last_usable_lba + 1;
+
+    primary_gpt.number_of_partition_entries = 128;
+    backup_gpt.number_of_partition_entries = 128;
+
+    primary_gpt.size_of_partition_entry = sizeof(gpt_partition_entry);
+    backup_gpt.size_of_partition_entry = sizeof(gpt_partition_entry);
+
+    primary_gpt.partition_entry_array_crc32 = get_crc32((const Bytef*) parts, sizeof(parts));
+    backup_gpt.partition_entry_array_crc32 = get_crc32((const Bytef*) parts, sizeof(parts));
+
+    primary_gpt.header_crc32 = get_crc32((const Bytef*) &primary_gpt, sizeof(gpt_header));
+    backup_gpt.header_crc32 = get_crc32((const Bytef*) &backup_gpt, sizeof(gpt_header));
+
     if(seek_lba(1, dev) == -1)
         return -1;
-
-    memcpy(gpt.signature, "EFI PART", sizeof(gpt.signature));
-
-    gpt.revision[0] = 0x00;
-    gpt.revision[1] = 0x00;
-    gpt.revision[2] = 0x01;
-    gpt.revision[3] = 0x00;
-
-    gpt.header_size = sizeof(gpt_header);
-
-    gpt.my_lba = 1;
-    gpt.alternate_lba = (dev->size / dev->lsz);
-    gpt.first_usable_lba = ((16385 / dev->lsz) + 2);
-    gpt.last_usable_lba = gpt.alternate_lba - 1;
-
-    gpt.header_crc32 = crc32(0L, Z_NULL, 0);
-    for(int i = 0; i < sizeof(gpt_header); i++)
-        gpt.header_crc32 = crc32(gpt.header_crc32, (unsigned char*) &gpt + i, 1);
-
-    // Write primary GPT Header
-    if((write(dev->descriptor, &gpt, sizeof(gpt_header)) == -1))
+    if(write(dev->descriptor, &primary_gpt, sizeof(gpt_header)) == -1)
         return -1;
-
-    // Write backup GPT Header
-    if(seek_lba(gpt.alternate_lba, dev) == -1)
+    if(seek_lba(last_lba, dev) == -1)
         return -1;
-    if(write(dev->descriptor, &gpt, sizeof(gpt_header)) == -1)
+    if(write(dev->descriptor, &backup_gpt, sizeof(gpt_header)) == -1)
         return -1;
     return 0;
 }
