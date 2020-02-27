@@ -9,7 +9,7 @@
 void print_gpt_info(gpt_header *gpt)
 {
     printf("Signature: %s\n", gpt->signature);
-    printf("Revision: %.4x\n", gpt->revision);
+    printf("Revision: 0x%.4x\n", gpt->revision);
     printf("Header size: %lu\n", gpt->header_size);
     printf("Header CRC32 Checksum: %lu\n", gpt->header_crc32);
     printf("My LBA: %llu\n", gpt->my_lba);
