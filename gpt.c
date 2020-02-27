@@ -19,7 +19,6 @@ int initialize_gpt(struct device *dev)
     gpt_header primary_gpt;
     gpt_header backup_gpt;
     gpt_partition_entry parts[128];
-    unsigned int header_crc32;
     unsigned long long first_usable_lba;
     unsigned long long last_usable_lba;
     unsigned long long last_lba;
