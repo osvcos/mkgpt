@@ -5,6 +5,7 @@
 #include "device.h"
 #include "mbr.h"
 #include "gpt.h"
+#include "guid.h"
 
 static unsigned long get_crc32(const Bytef* data, unsigned int len)
 {
@@ -19,6 +20,7 @@ int initialize_gpt(struct device *dev)
     gpt_header primary_gpt;
     gpt_header backup_gpt;
     gpt_partition_entry parts[128];
+    guid_t guid;
     unsigned long long first_usable_lba;
     unsigned long long last_usable_lba;
     unsigned long long last_lba;
@@ -56,7 +58,9 @@ int initialize_gpt(struct device *dev)
     primary_gpt.last_usable_lba = last_usable_lba;
     backup_gpt.last_usable_lba = last_usable_lba;
 
-     // TODO: Disk GUID
+    gen_v4_guid(&guid);
+    primary_gpt.disk_guid = guid;
+    backup_gpt.disk_guid = guid;
 
     primary_gpt.partition_entry_lba = 2;
     backup_gpt.partition_entry_lba = last_usable_lba + 1;

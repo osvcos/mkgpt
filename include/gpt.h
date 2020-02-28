@@ -2,6 +2,7 @@
 #define GPT_H
 
 #include "device.h"
+#include "guid.h"
 
 typedef struct {
     unsigned short partition_type_guid[8];
@@ -22,7 +23,7 @@ typedef struct {
     unsigned long long alternate_lba;
     unsigned long long first_usable_lba;
     unsigned long long last_usable_lba;
-    unsigned short disk_guid[8];
+    guid_t disk_guid;
     unsigned long long partition_entry_lba;
     unsigned int number_of_partition_entries;
     unsigned int size_of_partition_entry;
