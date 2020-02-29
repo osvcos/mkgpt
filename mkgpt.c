@@ -61,7 +61,7 @@ int main(int argc, char *argv[])
     }
     if(open_device(devname, &dev) < 0)
     {
-        printf("Unable to open device.\n");
+        printf("Unable to open device: %s\n", strerror(errno));
         return -1;
     }
     printf("Device: %s\n", devname);
