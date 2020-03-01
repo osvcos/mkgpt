@@ -13,7 +13,6 @@ typedef struct {
     unsigned char ending_chs[3];
     unsigned int starting_lba;
     unsigned int size_in_lba;
-    
 } __attribute__((packed)) partition_record;
 
 typedef struct {
