@@ -64,9 +64,7 @@ int main(int argc, char *argv[])
         printf("Unable to open device: %s\n", strerror(errno));
         return -1;
     }
-    printf("Device: %s\n", devname);
-    printf("Sector size (logical/physical): %d/%d\n", dev.lsz, dev.psz);
-    printf("Size (in bytes): %llu\n", dev.size);
+
     if(!force)
     {
         if(has_partition_scheme(&dev) != PARTSCHEME_IS_NOTHING)
