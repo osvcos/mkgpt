@@ -49,7 +49,11 @@ int create_mbr(struct device *dev, int type)
 
     if(dev->lsz > sizeof(master_boot_record))
     {
-        if(write(dev->descriptor, 0, (dev->lsz - sizeof(master_boot_record))))
+        unsigned int left_of_sector = (dev->lsz - sizeof(master_boot_record));
+        unsigned char zeros[left_of_sector];
+
+        memset(zeros, 0, left_of_sector);
+        if(write(dev->descriptor, zeros, left_of_sector) == -1)
             return -1;
     }
     return 0;
