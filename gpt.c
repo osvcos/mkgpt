@@ -1,19 +1,10 @@
 #include <string.h>
 #include <unistd.h>
-#include <zlib.h>
 
 #include "device.h"
 #include "mbr.h"
 #include "gpt.h"
 #include "guid.h"
-
-static unsigned long get_crc32(const Bytef* data, unsigned int len)
-{
-    unsigned long crc = crc32(0L, Z_NULL, 0);
-    for(int i = 0; i < len; i++)
-        crc = crc32(crc, data + i, 1);
-    return crc;
-}
 
 int initialize_gpt(struct device *dev)
 {

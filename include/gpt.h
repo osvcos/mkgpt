@@ -1,6 +1,8 @@
 #ifndef GPT_H
 #define GPT_H
 
+#include <zlib.h>
+
 #include "device.h"
 #include "guid.h"
 
@@ -29,6 +31,14 @@ typedef struct {
     unsigned int size_of_partition_entry;
     unsigned int partition_entry_array_crc32;
 } __attribute__((packed)) gpt_header;
+
+static unsigned long get_crc32(const Bytef* data, unsigned int len)
+{
+    unsigned long crc = crc32(0L, Z_NULL, 0);
+    for(int i = 0; i < len; i++)
+        crc = crc32(crc, data + i, 1);
+    return crc;
+}
 
 int initialize_gpt(struct device *dev);
 
