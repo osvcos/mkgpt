@@ -20,7 +20,7 @@ int open_device(char *devname, struct device *dev)
         return -1;
     if(ioctl(fd, BLKSSZGET, &lsz) == -1)
         return -1;
-    if(ioctl(fd, BLKBSZGET, &psz) == -1)
+    if(ioctl(fd, BLKPBSZGET, &psz) == -1)
         return -1;
     if(ioctl(fd, BLKGETSIZE64, &size) == -1)
         return -1;
