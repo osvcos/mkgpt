@@ -5,7 +5,7 @@ all: device.o mkgpt.o mbr.o gpt.o guid.o
 	gcc $(LDFLAGS) device.o mkgpt.o mbr.o gpt.o guid.o -o mkgpt
 
 gptdump: gptdump.o device.o
-	gcc gptdump.o device.o -o gptdump
+	gcc $(LDFLAGS) gptdump.o device.o -o gptdump
 
 device.o: device.c
 	gcc $(CFLAGS) -c device.c
