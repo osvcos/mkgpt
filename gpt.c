@@ -49,7 +49,7 @@ int initialize_gpt(struct device *dev)
     primary_gpt.last_usable_lba = last_usable_lba;
     backup_gpt.last_usable_lba = last_usable_lba;
 
-    gen_v4_guid(&guid);
+    gen_v4_efi_guid(&guid);
     primary_gpt.disk_guid = guid;
     backup_gpt.disk_guid = guid;
 

@@ -12,6 +12,6 @@ typedef struct {
     unsigned short node3;
 } __attribute__((packed)) guid_t;
 
-void gen_v4_guid(guid_t *guid);
+void gen_v4_efi_guid(guid_t *guid);
 
 #endif // GUID_H

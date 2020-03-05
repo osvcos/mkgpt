@@ -5,7 +5,7 @@
 #include "endian.h"
 #include "guid.h"
 
-void gen_v4_guid(guid_t *guid)
+void gen_v4_efi_guid(guid_t *guid)
 {
     unsigned short node1;
     unsigned short node2;
