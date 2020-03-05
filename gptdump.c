@@ -4,6 +4,7 @@
 #include <unistd.h>
 
 #include "device.h"
+#include "endian.h"
 #include "gpt.h"
 
 void print_gpt_info(gpt_header *gpt)
@@ -16,7 +17,7 @@ void print_gpt_info(gpt_header *gpt)
     printf("Alternate LBA: %llu\n", gpt->alternate_lba);
     printf("First usable LBA: %llu\n", gpt->first_usable_lba);
     printf("Last usable LBA: %llu\n", gpt->last_usable_lba);
-    printf("Disk GUID: %X-%.4X-%.4X-%.2X%.2X-%X%X%X\n", gpt->disk_guid.time_low, gpt->disk_guid.time_mid, gpt->disk_guid.time_hi_and_version, gpt->disk_guid.clock_seq_hi_and_reserved, gpt->disk_guid.clock_seq_low, gpt->disk_guid.node1, gpt->disk_guid.node2, gpt->disk_guid.node3);
+    printf("Disk GUID: %.8X-%.4X-%.4X-%.2X%.2X-%X%X%X\n", gpt->disk_guid.time_low, gpt->disk_guid.time_mid, gpt->disk_guid.time_hi_and_version, gpt->disk_guid.clock_seq_hi_and_reserved, gpt->disk_guid.clock_seq_low, swap_u16(gpt->disk_guid.node1), swap_u16(gpt->disk_guid.node2), swap_u16(gpt->disk_guid.node3));
     printf("Partition entry LBA: %llu\n", gpt->partition_entry_lba);
     printf("Number of partition entries: %lu\n", gpt->number_of_partition_entries);
     printf("Size of partition entry: %lu\n", gpt->size_of_partition_entry);
