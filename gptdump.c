@@ -48,6 +48,13 @@ int main(int argc, char *argv[])
         return -1;
     }
 
+    if(has_partition_scheme(&dev) != PARTSCHEME_IS_GPT)
+    {
+        printf("This device does not have a GUID Partition Table.\n");
+        close_device(&dev);
+        return -1;
+    }
+
     last_lba = (dev.size / dev.lsz) - 1;
 
     printf("Total LBAs: %llu\n\n", last_lba + 1);
