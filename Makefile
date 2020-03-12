@@ -1,17 +1,20 @@
 CFLAGS := -Iinclude
 LDFLAGS := $(shell pkg-config --libs zlib)
 
-all: device.o mkgpt.o mbr.o gpt.o guid.o endian.o
-	gcc $(LDFLAGS) device.o mkgpt.o mbr.o gpt.o guid.o endian.o -o mkgpt
+all: device.o mkgpt.o mbr.o gpt.o guid.o endian.o utils.o
+	gcc $(LDFLAGS) device.o mkgpt.o mbr.o gpt.o guid.o endian.o utils.o -o mkgpt
 
 gptdump: gptdump.o device.o endian.o
-	gcc $(LDFLAGS) gptdump.o device.o endian.o -o gptdump
+	gcc gptdump.o device.o endian.o -o gptdump
 
 device.o: device.c
 	gcc $(CFLAGS) -c device.c
 
 mkgpt.o: mkgpt.c
 	gcc $(CFLAGS) -c mkgpt.c
+
+utils.o: utils.c
+	gcc $(CFLAGS) -c utils.c
 
 endian.o : endian.c
 	gcc $(CFLAGS) -c endian.c

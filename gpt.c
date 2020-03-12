@@ -5,6 +5,7 @@
 #include "mbr.h"
 #include "gpt.h"
 #include "guid.h"
+#include "utils.h"
 
 int initialize_gpt(struct device *dev)
 {
