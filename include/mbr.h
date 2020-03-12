@@ -23,7 +23,6 @@ typedef struct {
     unsigned char signature[2];
 } __attribute__((packed)) master_boot_record;
 
-int mbr_exists(struct device *dev);
 int create_mbr(struct device *dev, int type);
 
 #endif // MBR_H
