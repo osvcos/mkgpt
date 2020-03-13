@@ -5,8 +5,8 @@
 #include "guid.h"
 
 typedef struct {
-    unsigned short partition_type_guid[8];
-    unsigned short partition_guid[8];
+    guid_t partition_type_guid;
+    guid_t partition_guid;
     unsigned long long starting_lba;
     unsigned long long ending_lba;
     unsigned long long attributes;
