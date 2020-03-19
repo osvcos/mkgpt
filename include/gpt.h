@@ -14,7 +14,7 @@ typedef struct {
 } __attribute__((packed)) gpt_partition_entry;
 
 typedef struct {
-    unsigned char signature[8];
+    unsigned long long signature;
     unsigned int revision;
     unsigned int header_size;
     unsigned int header_crc32;

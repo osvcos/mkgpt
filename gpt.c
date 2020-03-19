@@ -24,8 +24,8 @@ int initialize_gpt(struct device *dev)
     memset(&backup_gpt, 0, sizeof(gpt_header));
     memset(parts, 0, sizeof(parts));
 
-    memcpy(primary_gpt.signature, "EFI PART", sizeof(primary_gpt.signature));
-    memcpy(backup_gpt.signature, "EFI PART", sizeof(primary_gpt.signature));
+    primary_gpt.signature = 0x5452415020494645;
+    backup_gpt.signature = 0x5452415020494645;
 
     primary_gpt.revision = 0x00010000;
     backup_gpt.revision = 0x00010000;
