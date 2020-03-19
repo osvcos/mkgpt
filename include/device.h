@@ -1,6 +1,7 @@
 #ifndef DEVICE_H
 #define DEVICE_H
 
+// Values returned by has_partition_scheme
 #define PARTSCHEME_IS_NOTHING 0x00000000
 #define PARTSCHEME_IS_MBR     0x00000001
 #define PARTSCHEME_IS_GPT     0x00000002
