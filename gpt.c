@@ -7,15 +7,15 @@
 #include "guid.h"
 #include "utils.h"
 
-int initialize_gpt(struct device *dev)
+s32 initialize_gpt(struct device *dev)
 {
     gpt_header primary_gpt;
     gpt_header backup_gpt;
     gpt_partition_entry parts[128];
     guid_t guid;
-    unsigned long long first_usable_lba;
-    unsigned long long last_usable_lba;
-    unsigned long long last_lba;
+    u64 first_usable_lba;
+    u64 last_usable_lba;
+    u64 last_lba;
 
     if(create_mbr(dev, MBR_TYPE_PROTECTIVE) == -1)
         return -1;

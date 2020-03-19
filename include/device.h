@@ -1,6 +1,8 @@
 #ifndef DEVICE_H
 #define DEVICE_H
 
+#include "types.h"
+
 // Values returned by has_partition_scheme
 #define PARTSCHEME_IS_NOTHING 0x00000000
 #define PARTSCHEME_IS_MBR     0x00000001
@@ -8,18 +10,18 @@
 
 struct device {
     // File descriptor returned by open()
-    int descriptor;
+    s32 descriptor;
     // Logical sector size
-    int lsz;
+    s32 lsz;
     // Phisical sector size
-    int psz;
+    s32 psz;
     // Size of the device in bytes
-    unsigned long long size;
+    u64 size;
 };
 
-int open_device(char *devname, struct device *dev);
+s32 open_device(u8 *devname, struct device *dev);
 void close_device(struct device *dev);
-int has_partition_scheme(struct device *dev);
-int seek_lba(unsigned long long lba_address, struct device *dev);
+s32 has_partition_scheme(struct device *dev);
+s32 seek_lba(u64 lba_address, struct device *dev);
 
 #endif // DEVICE_H

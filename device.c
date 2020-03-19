@@ -8,12 +8,12 @@
 #include "device.h"
 #include "mbr.h"
 
-int open_device(char *devname, struct device *dev)
+s32 open_device(u8 *devname, struct device *dev)
 {
-    int fd = 0;
-    int lsz = 0;
-    int psz = 0;
-    unsigned long long size = 0;
+    s32 fd = 0;
+    s32 lsz = 0;
+    s32 psz = 0;
+    u64 size = 0;
 
     fd = open(devname, O_RDWR);
     if(fd < 0)
@@ -41,10 +41,10 @@ void close_device(struct device *dev)
     dev->size = 0;
 }
 
-int has_partition_scheme(struct device *dev)
+s32 has_partition_scheme(struct device *dev)
 {
     master_boot_record mbr;
-    int retval = PARTSCHEME_IS_NOTHING;
+    s32 retval = PARTSCHEME_IS_NOTHING;
 
     if(seek_lba(0, dev) == -1)
     {
@@ -63,8 +63,8 @@ int has_partition_scheme(struct device *dev)
     return retval;
 }
 
-int seek_lba(unsigned long long lba_address, struct device *dev)
+s32 seek_lba(u64 lba_address, struct device *dev)
 {
-    unsigned long long offset = dev->lsz * lba_address;
+    u64 offset = dev->lsz * lba_address;
     return lseek(dev->descriptor, offset, SEEK_SET);
 }

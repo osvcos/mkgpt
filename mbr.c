@@ -4,11 +4,11 @@
 #include "device.h"
 #include "mbr.h"
 
-int create_mbr(struct device *dev, int type)
+s32 create_mbr(struct device *dev, u32 type)
 {
     master_boot_record mbr;
-    partition_record partitions[4];
-    unsigned long long total_sectors;
+    partition_record   partitions[4];
+    u64                total_sectors;
 
     if(seek_lba(0, dev) == -1)
         return -1;
@@ -40,7 +40,7 @@ int create_mbr(struct device *dev, int type)
         if(total_sectors > 0xFFFFFFFF)
             partitions[0].size_in_lba = 0xFFFFFFFF;
         else
-            partitions[0].size_in_lba = (unsigned int) total_sectors;
+            partitions[0].size_in_lba = (u32) total_sectors;
     }
     memcpy(mbr.partitions, partitions, sizeof(partitions));
 
@@ -49,8 +49,8 @@ int create_mbr(struct device *dev, int type)
 
     if(dev->lsz > sizeof(master_boot_record))
     {
-        unsigned int left_of_sector = (dev->lsz - sizeof(master_boot_record));
-        unsigned char zeros[left_of_sector];
+        u32 left_of_sector = (dev->lsz - sizeof(master_boot_record));
+        u8  zeros[left_of_sector];
 
         memset(zeros, 0, left_of_sector);
         if(write(dev->descriptor, zeros, left_of_sector) == -1)

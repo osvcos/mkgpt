@@ -6,11 +6,12 @@
 #include "device.h"
 #include "endian.h"
 #include "gpt.h"
+#include "types.h"
 
 void print_gpt_info(gpt_header *gpt)
 {
-    char signature[8];
-    memcpy(signature, (const char*) &gpt->signature, 8);
+    u8 signature[8];
+    memcpy(signature, (const u8*) &gpt->signature, 8);
     printf("Signature: %s\n", signature);
     printf("Revision: 0x%.4x\n", gpt->revision);
     printf("Header size: %lu\n", gpt->header_size);
@@ -36,7 +37,7 @@ int main(int argc, char *argv[])
     struct device dev;
     gpt_header primary_gpt;
     gpt_header backup_gpt;
-    unsigned long long last_lba;
+    u64 last_lba;
 
     if(argc < 2)
     {

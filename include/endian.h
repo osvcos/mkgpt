@@ -1,6 +1,8 @@
 #ifndef ENDIAN_H
 #define ENDIAN_H
 
-unsigned short swap_u16(unsigned short value);
+#include "types.h"
+
+u16 swap_u16(u16 value);
 
 #endif // ENDIAN_H
