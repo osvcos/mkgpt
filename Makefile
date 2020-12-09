@@ -5,7 +5,7 @@ CFLAGS           := -I$(INCLUDE)
 LDFLAGS          := $(shell pkg-config --libs zlib)
 
 all: $(MKGPT_OBJECTS)
-	gcc $(LDFLAGS) $(MKGPT_OBJECTS) -o mkgpt
+	gcc $(MKGPT_OBJECTS) $(LDFLAGS) -o mkgpt
 
 gptdump: $(GPTDUMP_OBJECTS)
 	gcc $(GPTDUMP_OBJECTS) -o gptdump
